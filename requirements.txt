@@ -1,0 +1,28 @@
+# --- Interface and System ---
+customtkinter
+Pillow
+psutil
+pandas
+
+# --- Imaging and Calculation ---
+numpy<2.0.0
+scikit-image
+opencv-python
+matplotlib
+nd2reader
+pims
+scikit-learn
+threadpoolctl
+
+# --- Deep Learning and AI ---
+torch
+torchvision
+hydra-core
+iopath
+fvcore
+tqdm
+cellpose
+
+# --- Build Tools ---
+pycocotools
+pyinstaller
