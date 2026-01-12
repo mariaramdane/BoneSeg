@@ -17,21 +17,23 @@ if exist "build" rd /s /q build
 if exist "dist" rd /s /q dist
 if exist "BoneSeg.spec" del BoneSeg.spec
 
-:: 3. Launch build (FIXED FOR ND2READER AND SKLEARN)
-echo [+] Compiling (this may take a few minutes)...
+:: 3. Launch build
+echo [+] Compiling...
 python -m PyInstaller --noconfirm --onedir --windowed ^
     --icon="icon.ico" ^
     --add-data "sam2/sam2/configs;sam2/sam2/configs" ^
     --add-data "sam2/checkpoints;sam2/checkpoints" ^
     --add-data "logo.png;." ^
     --collect-all "hydra" ^
-    --collect-all "sam2" ^
+    --collect-submodules "sam2" ^
     --collect-all "customtkinter" ^
-    --collect-all "cellpose" ^
     --hidden-import "nd2reader" ^
     --hidden-import "pims" ^
     --hidden-import "sklearn.utils._typedefs" ^
-    --hidden-import "sklearn.neighbors._partition_nodes" ^
+    --hidden-import "torch" ^
+    --hidden-import "torchvision" ^
+    --exclude-module "torch._dynamo" ^
+    --exclude-module "torch._numpy" ^
     "BoneSeg.py"
 
 :: 4. Verification and Deployment
@@ -46,8 +48,9 @@ echo [+] Deploying files...
 if exist "BoneSeg.exe" del /f /q "BoneSeg.exe"
 if exist "_internal" rd /s /q "_internal"
 
+:: Déplacement des fichiers vers la racine
 move /y "dist\BoneSeg\BoneSeg.exe" "."
-move /y "dist\BoneSeg\_internal" "."
+xcopy /e /i /y "dist\BoneSeg\_internal" "_internal"
 
 :: 5. Final cleanup
 rd /s /q dist
