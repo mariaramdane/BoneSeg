@@ -1,6 +1,6 @@
 - The detailed procedure for data acquisition is in "procedure_acquisition.pdf".
 - To test the app, download the sample of data here: https://doi.org/10.5281/zenodo.18236099
-- Download all the files in the main folder of the repository, and put them in the same folder containing your data and sam2 folders. Check "DMP_document.pdf" for more details on folders architecture.
+- Download all the files in the main folder of the repository, and put them in the same folder containing your data and sam2 folders. Please first check "DMP_document.pdf" for details on folders architecture.
 - Click on the files in this order :
 1) setup_me.bat
 2) build_app.bat
