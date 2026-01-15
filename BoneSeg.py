@@ -3,8 +3,7 @@ import sys
 import types
 from pathlib import Path
 
-# --- LE HACK ULTIME POUR TORCH / PYINSTALLER ---
-# On neutralise Dynamo et torch._numpy AVANT d'importer torch ou torchvision
+
 mock_modules = [
     'torch._dynamo',
     'torch._dynamo.utils',
@@ -19,11 +18,9 @@ for mod_name in mock_modules:
     mock_mod = types.ModuleType(mod_name)
     sys.modules[mod_name] = mock_mod
 
-# On injecte les fonctions minimales nécessaires pour éviter les AttributeError
 sys.modules['torch._dynamo.utils'].is_compile_supported = lambda: False
 sys.modules['torch._dynamo'].optimize = lambda *args, **kwargs: (lambda x: x)
 
-# --- CONFIGURATION ET IMPORTS STANDARDS ---
 import numpy as np
 from PIL import Image
 from nd2reader import ND2Reader
@@ -34,17 +31,16 @@ import csv
 from skimage.measure import label, regionprops
 import threading
 
-# Désactivation globale du JIT pour la stabilité de l'EXE
+
 torch.jit._state.disable()
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
-# Redirection des flux pour le mode sans console (--windowed)
+
 if sys.stdout is None:
     sys.stdout = open(os.devnull, "w")
 if sys.stderr is None:
     sys.stderr = open(os.devnull, "w")
 
-# --- DETECTION DES CHEMINS ---
 if getattr(sys, 'frozen', False):
     BASE_DIR = Path(sys._MEIPASS)
     SAM2_ROOT = BASE_DIR / "sam2"
@@ -57,7 +53,6 @@ if str(SAM2_ROOT) not in sys.path:
 
 os.environ["PYTHONPATH"] = str(SAM2_ROOT)
 
-# --- INITIALISATION HYDRA ---
 from hydra.core.global_hydra import GlobalHydra
 from hydra import initialize_config_dir
 
@@ -65,11 +60,9 @@ GlobalHydra.instance().clear()
 config_dir = str(SAM2_ROOT / "sam2" / "configs")
 initialize_config_dir(config_dir=config_dir, version_base=None)
 
-# Imports SAM2 après la configuration des chemins
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
 
-# Sélection du processeur (GPU/MPS/CPU)
 if torch.cuda.is_available():
     device = torch.device("cuda")
 elif torch.backends.mps.is_available():
@@ -77,13 +70,12 @@ elif torch.backends.mps.is_available():
 else:
     device = torch.device("cpu")
 
-# --- APPLICATION ---
+
 class SegmentationApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("BoneSeg")
         
-        # Gestion de l'icône
         icon_path = os.path.join(BASE_DIR, "icon.ico")
         if os.path.exists(icon_path):
             try:
@@ -94,12 +86,10 @@ class SegmentationApp(ctk.CTk):
         self.geometry("1400x900")
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
-
-        # Raccourcis et état de la fenêtre
+        
         self.bind("<Escape>", lambda e: self.attributes("-fullscreen", False))
         self.after(10, lambda: self.state("zoomed"))
         
-        # Structure de l'interface
         self.left_frame = ctk.CTkFrame(self, width=350, corner_radius=10)
         self.left_frame.pack(side="left", fill="y", padx=10, pady=10)
 
@@ -112,7 +102,6 @@ class SegmentationApp(ctk.CTk):
         self.image_label = ctk.CTkLabel(self.right_frame, text="Load an image to start")
         self.image_label.pack(expand=True)
 
-        # Variables de contrôle
         self.file_path = ctk.StringVar()
         self.segmentation_tool = ctk.StringVar(value="SAM2 - Predictor")
         self.sam2_version = ctk.StringVar(value="trained")
@@ -206,7 +195,6 @@ class SegmentationApp(ctk.CTk):
                 frames = [images.get_frame_2D(c=c_idx, z=z) for z in range(Z)]
                 img2d = np.max(np.stack(frames, axis=0), axis=0)
             
-            # Normalisation 8-bit
             img_min, img_max = img2d.min(), img2d.max()
             img_uint8 = ((img2d - img_min) / (img_max - img_min + 1e-8) * 255).astype(np.uint8)
             
@@ -333,3 +321,4 @@ class SegmentationApp(ctk.CTk):
 if __name__ == "__main__":
     app = SegmentationApp()
     app.mainloop()
+
