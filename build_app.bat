@@ -48,7 +48,6 @@ echo [+] Deploying files...
 if exist "BoneSeg.exe" del /f /q "BoneSeg.exe"
 if exist "_internal" rd /s /q "_internal"
 
-:: Déplacement des fichiers vers la racine
 move /y "dist\BoneSeg\BoneSeg.exe" "."
 xcopy /e /i /y "dist\BoneSeg\_internal" "_internal"
 
@@ -62,3 +61,4 @@ echo ====================================================
 echo SUCCESS! BoneSeg.exe is ready.
 echo ====================================================
 pause
+
