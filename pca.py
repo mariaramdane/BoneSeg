@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.decomposition import PCA
 
-# --- Configuration de la police (Times New Roman 12, style normal) ---
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = ["Times New Roman"]
 plt.rcParams["font.size"] = 18
@@ -41,22 +40,20 @@ explained_var = pca_obj.explained_variance_ratio_ * 100
 # --- 2) Plot ---
 fig, ax = plt.subplots(figsize=(8, 6))
 
-# Plot Anat samples (8 premières lignes)
+# Plot Anat samples
 ax.scatter(DATA_pca[:8, 0], DATA_pca[:8, 1],
            c='red', label='anat', alpha=0.8, edgecolors='k', s=80)
 
-# Plot Koek samples (restant)
+# Plot Koek samples
 ax.scatter(DATA_pca[8:, 0], DATA_pca[8:, 1],
            c='blue', label='koek', alpha=0.8, edgecolors='k', s=80)
 
-# Labels des axes avec variance entre parenthèses (pas de titre)
 ax.set_xlabel(f"PC1 ({explained_var[0]:.1f}%)")
 ax.set_ylabel(f"PC2 ({explained_var[1]:.1f}%)")
-
-# Légende placée en haut à droite
 ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
 plt.grid(alpha=0.3, linestyle='--')
 fig.tight_layout()
+
 
 plt.show()
