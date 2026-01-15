@@ -4,7 +4,7 @@
 - Click on the files in this order :
 1) setup_me.bat
 2) build_app.bat
-The application will be automatically created after this. Click on the new file BoneSeg.exe to launch the interface.
+- The application will be automatically created after this. Click on the new file BoneSeg.exe to launch the interface.
 - Other codes used for the project have been provided in this repository:
 1) run_pca.bat, pca.py and results.txt to perform Principal Component Analysis on the results
 2) macro.ijm for ImageJ analysis (histogram plot of BrightField images)
