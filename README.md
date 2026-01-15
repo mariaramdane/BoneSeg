@@ -6,6 +6,6 @@
 2) build_app.bat
 The application will be automatically created after this. Click on the new file BoneSeg.exe to launch the interface.
 - Other codes used for the project have been provided in this repository:
-* run_pca.bat, pca.py and results.txt to perform Principal Component Analysis on the results
-* macro.ijm for ImageJ analysis (histogram plot of BrightField images)
-* QuPath_annotation_to_png_mask.groovy for binary mask creation used in SAM2 training.
+-> run_pca.bat, pca.py and results.txt to perform Principal Component Analysis on the results
+-> macro.ijm for ImageJ analysis (histogram plot of BrightField images)
+-> QuPath_annotation_to_png_mask.groovy for binary mask creation used in SAM2 training.
