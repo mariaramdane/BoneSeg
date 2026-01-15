@@ -29,14 +29,12 @@ python -m pip install --upgrade pip
 
 :: 4. Installing Core Dependencies first
 echo [+] Installing PyTorch and dependencies...
-:: Utilisation de cu118 (stable). Assure-toi que c'est bien ce que tu veux.
 python -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 python -m pip install "numpy<2.0.0" "pillow<11.0.0"
 
 echo [+] Installing Imaging and Analysis tools...
 python -m pip install nd2reader pims scikit-image scikit-learn pandas matplotlib customtkinter
 
-:: --- AJOUT IMPORTANT POUR LE BUILD ---
 echo [+] Installing Build tools...
 python -m pip install pyinstaller
 :: --------------------------------------
@@ -51,7 +49,6 @@ if exist "requirements.txt" (
 if exist "sam2" (
     echo [+] Installing SAM2...
     cd sam2
-    :: On utilise --no-deps pour éviter que SAM2 ne change ta version de torch/numpy
     python -m pip install -e . --no-deps
     cd ..
 )
@@ -70,7 +67,7 @@ python -m PyInstaller --version >nul 2>&1 || set "MISSING=%MISSING% pyinstaller"
 
 if "%MISSING%"=="" (
     echo [SUCCESS] All critical libraries found!
-    echo You can now run your code or build the EXE.
+    echo You can now build the EXE.
 ) else (
     echo [ERROR] The following libraries failed to install: %MISSING%
     pause
@@ -78,3 +75,4 @@ if "%MISSING%"=="" (
 )
 
 pause
+
